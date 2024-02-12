@@ -63,6 +63,8 @@ classdef ServiceQueue < handle
         % Servers.
         Waiting;
 
+        Balking;
+
         % Served - Cell array row vector of Customer objects. Initially
         % empty.  When a Customer's service is complete, the Customer
         % object is moved from its slot in Servers to the end of Served.
@@ -112,6 +114,7 @@ classdef ServiceQueue < handle
             obj.Servers = cell([1, obj.NumServers]);
             obj.Events = PriorityQueue({}, @(x) x.Time);
             obj.Waiting = {};
+            obj.Balking = {};
             obj.Served = {};
             obj.Log = table( ...
                 Size=[0, 4], ...
@@ -183,8 +186,49 @@ classdef ServiceQueue < handle
             c.ArrivalTime = obj.Time;
 
             % The Customer is appended to the list of waiting customers.
-            obj.Waiting{end+1} = c;
+            %PUT IN IF STATEMENT FOR CUSTOMER MOVEMENT, ADD BALK LIST
+            NWaiting = length(obj.Waiting);
+            NInService = obj.NumServers - sum(obj.ServerAvailable);
+            NTotal = NWaiting+NInService;
+            if NTotal == 0
+                obj.Waiting{end+1} = c;
+            
+                % Condence if statement to process NTotal 1 to 3
+            elseif NTotal <= 3
+                randomnum = rand();
+                probability = NTotal/3;
 
+                 if randomnum <= probability
+                    obj.Balking{end+1} = c;
+                 else
+                    obj.Waiting{end+1} = c;
+                 end
+            end 
+           
+          
+                
+                       
+            % 
+            %             obj.Waiting{end+1} = c;
+            %         end
+            % elseif NTotal == 2
+            %     randomnum = rand();
+            %         probability = 2/3;
+            %         if randomnum <= probability
+            %             obj.Balking{end+1} = c;
+            %         else
+            %             obj.Waiting{end+1} = c;
+            %         end 
+            % elseif NTotal == 3
+            %     randomnum = rand();
+            %         probability = 3/3;
+            %         if randomnum <= probability
+            %             obj.Balking{end+1} = c;
+            %         else
+            %             obj.Waiting{end+1} = c;
+            %         end
+    
+ 
             % Construct the next Customer that will arrive.
             % Its Id is one higher than the one that just arrived.
             next_customer = Customer(c.Id + 1);

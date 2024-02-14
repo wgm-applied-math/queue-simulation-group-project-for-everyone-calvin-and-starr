@@ -58,6 +58,13 @@ h = histogram(NInSystem, Normalization="probability", BinMethod="integers");
 % create a new one.
 hold on;
 
+% plot the correct probabilities for the queue
+adjProb = [.402797, .402797, .151048875, .0377622188, .0055944028];
+
+xVal = [0, 1, 2, 3, 4];
+
+plot(xVal, adjProb, 'o', MarkerEdgeColor='k', MarkerFaceColor='r');
+
 % For comparison, plot the theoretical results for a M/M/1 queue.
 % The agreement isn't all that good unless you run for a long time, say
 % max_time = 10,000 units, and LogInterval is large, say 10.

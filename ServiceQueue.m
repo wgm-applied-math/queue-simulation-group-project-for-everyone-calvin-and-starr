@@ -7,12 +7,12 @@ classdef ServiceQueue < handle
         % ArrivalRate - Customers arrive according to a Poisson process.
         % The inter-arrival time is exponentially distributed with a rate
         % parameter of ArrivalRate.
-        ArrivalRate = 1/15;
+        ArrivalRate = 1/4;
 
         % DepartureRate - When a customer arrives, the time it takes for
         % them to be served is exponentially distributed with a rate
         % parameter of DepartureRate.
-        DepartureRate = 1/15;
+        DepartureRate = 1/4;
 
         % NumServers - How many identical serving stations are available.
         NumServers = 2;

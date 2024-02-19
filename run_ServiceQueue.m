@@ -7,7 +7,7 @@
 n_samples = 100;
 
 % Each sample is run up to a maximum time of 1000.
-max_time = 1000;
+max_time = 480;
 
 % Record how many customers are in the system at the end of each sample.
 NInSystemSamples = cell([1, n_samples]);
@@ -47,6 +47,22 @@ NInSystem = vertcat(NInSystemSamples{:});
 % f(*args).
 
 %% Make a picture
+systemtotallist = [];
+systemwaitinglist = [];
+systemservicelist = [];
+for n=1:length(q.Served)
+    systemtotal = q.Served{1,n}.DepartureTime-q.Served{1,n}.ArrivalTime;
+    systemwaiting = q.Served{1,n}.BeginServiceTime-q.Served{1,n}.ArrivalTime;
+    systemservice = q.Served{1,n}.DepartureTime-q.Served{1,n}.BeginServiceTime;
+    systemtotallist(end+1) = systemtotal;
+    systemwaitinglist(end+1)= systemwaiting;
+    systemservicelist(end+1)= systemservice;
+end
+totaltime = sum(systemtotallist)
+totalwait = sum(systemwaitinglist)
+totalservice = sum(systemservicelist)
+
+probbalk = length(q.Balking)/(length(q.Balking)+length(q.Served))
 
 % Start with a histogram.  The result is an empirical PDF, that is, the
 % area of the bar at horizontal index n is proportional to the fraction of

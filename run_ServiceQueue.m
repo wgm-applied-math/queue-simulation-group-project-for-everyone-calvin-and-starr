@@ -114,7 +114,13 @@ fig5=figure();
 t5=tiledlayout(fig5,1,1);
 ax5= nexttile(t5);
 
-%balkinghist = histogram(ax5,q.Balking,Normalization="probability",BinMethod="auto");
+servebalk=length(q.Served)+length(q.Balking);
+x=0:servebalk;
+pd = binopdf(x,servebalk,probbalk);
+
+bar(ax5,x,pd)
+xlabel='Observation';
+ylabel='Probability';
 
 
 % For comparison, plot the theoretical results for a M/M/1 queue.
@@ -129,7 +135,7 @@ P(1) = P0;
 for n = 1:nMax
     P(1+n) = P0 * rho^n;
 end
-plot(ns, P, 'o', MarkerEdgeColor='k', MarkerFaceColor='r');
+%plot(ns, P, 'o', MarkerEdgeColor='k', MarkerFaceColor='r');
 
 % This sets some paper-related properties of the figure so that you can
 % save it as a PDF and it doesn't fill a whole page.

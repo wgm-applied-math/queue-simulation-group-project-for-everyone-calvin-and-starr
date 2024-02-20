@@ -67,12 +67,18 @@ probbalk = length(q.Balking)/(length(q.Balking)+length(q.Served))
 % Start with a histogram.  The result is an empirical PDF, that is, the
 % area of the bar at horizontal index n is proportional to the fraction of
 % samples for which there were n customers in the system.
-h = histogram(NInSystem, Normalization="probability", BinMethod="integers");
+fig=figure();
+t=tiledlayout(fig,1,1);
+ax = nexttile(t);
 
 % MATLAB-ism: Once you've created a picture, you can use "hold on" to cause
 % further plotting function to work with the same picture rather than
 % create a new one.
-hold on;
+%hold on;
+hold(ax,'on');
+
+h = histogram(ax,NInSystem, Normalization="probability", BinMethod="integers");
+
 
 % plot the correct probabilities for the queue
 adjProb = [.402797, .402797, .151048875, .0377622188, .0055944028];
@@ -80,6 +86,36 @@ adjProb = [.402797, .402797, .151048875, .0377622188, .0055944028];
 xVal = [0, 1, 2, 3, 4];
 
 plot(xVal, adjProb, 'o', MarkerEdgeColor='k', MarkerFaceColor='r');
+
+%Total Service Time Histogram
+fig2=figure();
+t2=tiledlayout(fig2,1,1);
+ax2= nexttile(t2);
+
+totalhist = histogram(ax2,systemtotallist,Normalization="probability",BinMethod="auto");
+
+%Waiting Time Histogram
+fig3=figure();
+t3=tiledlayout(fig3,1,1);
+ax3= nexttile(t3);
+
+waitinghist = histogram(ax3,systemwaitinglist,Normalization="probability",BinMethod="auto");
+
+%Service Time Histogram
+fig4=figure();
+t4=tiledlayout(fig4,1,1);
+ax4= nexttile(t4);
+
+servicehist = histogram(ax4,systemservicelist,Normalization="probability",BinMethod="auto");
+
+
+%Balking Histogram
+fig5=figure();
+t5=tiledlayout(fig5,1,1);
+ax5= nexttile(t5);
+
+%balkinghist = histogram(ax5,q.Balking,Normalization="probability",BinMethod="auto");
+
 
 % For comparison, plot the theoretical results for a M/M/1 queue.
 % The agreement isn't all that good unless you run for a long time, say

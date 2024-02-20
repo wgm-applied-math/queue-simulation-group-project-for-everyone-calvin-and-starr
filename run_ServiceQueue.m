@@ -119,7 +119,14 @@ fig5=figure();
 t5=tiledlayout(fig5,1,1);
 ax5= nexttile(t5);
 
-%balkinghist = histogram(ax5,q.Balking,Normalization="probability",BinMethod="auto");
+servebalk=length(q.Served)+length(q.Balking);
+x=0:servebalk;
+pd = binopdf(x,servebalk,probbalk);
+
+bar(ax5,x,pd)
+xlabel='Observation';
+ylabel='Probability';
+
 
 
 % For comparison, plot the theoretical results for a M/M/1 queue.
